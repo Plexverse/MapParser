@@ -71,4 +71,47 @@ public class Menus {
                 ).build()
             ).build()
         ).build();
+
+    public static final ConfigurableMenu MODIFY_MENU = new ConfigurableMenu.Builder()
+        .menuTitle("<red>Modify %data_point% Data Point")
+        .menuDesign(
+            "$$$$$$$$$",
+            "$$T$Y$P$$",
+            "$$$$$$$$$"
+        ).item(new ConfigurableMenuButton.Builder()
+            .name("bg")
+            .key('$')
+            .defaultItem(ItemBuilder.create(Material.PURPLE_STAINED_GLASS_PANE).build())
+            .build()
+        ).item(new ConfigurableMenuButton.Builder()
+            .name("team")
+            .key('T')
+            .defaultItem(ItemBuilder.create(Material.RED_BED)
+                .name("<light_purple><b>Change Team</b>")
+                .lore(
+                    "  <dark_purple><b>Current Team:</b> <white>%team%",
+                    "<gray><i>(( Click to change the Team ))"
+                ).build()
+            ).build()
+        ).item(new ConfigurableMenuButton.Builder()
+            .name("yaw")
+            .key('Y')
+            .defaultItem(ItemBuilder.create(Material.OAK_SIGN)
+                .name("<light_purple><b>Change Yaw</b>")
+                .lore(
+                    "",
+                    "<gray><i>(( Click to change the Yaw ))"
+                ).build()
+            ).build()
+        ).item(new ConfigurableMenuButton.Builder()
+            .name("pitch")
+            .key('P')
+            .defaultItem(ItemBuilder.create(Material.BARRIER)
+                .name("<light_purple><b>Chance Pitch</b>")
+                .lore(
+                    "",
+                    "<gray><i>(( Click to change the Pitch ))"
+                ).build()
+            ).build()
+        ).build();
 }

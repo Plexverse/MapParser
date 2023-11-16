@@ -42,6 +42,7 @@ public class InputAsker {
 
             final ActiveAsker activeAsker = this.currentAskers.remove(player.getUniqueId());
             activeAsker.answer.accept(message);
+            event.setCancelled(true);
         });
     }
 

@@ -1,6 +1,8 @@
 package net.plexverse.mapparser.listener;
 
+import net.plexverse.mapparser.constant.Keys;
 import net.plexverse.mapparser.menu.DataPointMenu;
+import net.plexverse.mapparser.menu.ModifyMenu;
 import net.plexverse.mapparser.util.event.Events;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -30,6 +32,11 @@ public class ArmorStandListener {
             final Player player = event.getPlayer();
             final Entity clickedEntity = event.getRightClicked();
             if (!(clickedEntity instanceof ArmorStand)) {
+                return;
+            }
+
+            if (clickedEntity.getPersistentDataContainer().has(Keys.DATAPOINT_KEY)) {
+                new ModifyMenu(player, clickedEntity).open();
                 return;
             }
 
