@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.SneakyThrows;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.plexverse.mapparser.MapParser;
 import net.plexverse.mapparser.constant.Keys;
 import net.plexverse.mapparser.enums.DataPointType;
 import net.plexverse.mapparser.parsed.DataPointInfo;
@@ -25,17 +26,17 @@ import java.util.List;
 import java.util.Locale;
 
 public class WorldParser {
+    private final MapParser plugin;
     private final Player player;
     private final Location centerLocation;
     private final World world;
     private final String mapName;
-    private final String builder;
+    private final String gameName;
     private final int radius;
 
     private final DataPointInfo dataPointInfo;
 
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().setLenient().enableComplexMapKeySerialization().create();
-    private static final File TEMPLATES_FOLDER = new File(Bukkit.getWorldContainer(), "templates");
+    public static final File TEMPLATES_FOLDER = new File(Bukkit.getWorldContainer(), "templates");
     private static final List<String> DO_NOT_COPY = Arrays.asList(
         "session.lock",
         "uid.dat",
@@ -44,15 +45,18 @@ public class WorldParser {
         "stats"
     );
 
-    public WorldParser(Player player, String mapName, String builder, int radius) {
+    public WorldParser(MapParser plugin, Player player, String gameName, String mapName, String builder, int radius) {
+        this.plugin = plugin;
         this.player = player;
         this.centerLocation = player.getLocation();
         this.world = player.getWorld();
+        this.gameName = gameName;
         this.mapName = mapName;
-        this.builder = builder;
         this.radius = radius;
 
         this.dataPointInfo = new DataPointInfo();
+        this.dataPointInfo.addMapMeta("gameType", gameName.toUpperCase(Locale.ROOT));
+        this.dataPointInfo.addMapMeta("builder", builder);
     }
 
     @SneakyThrows
@@ -84,25 +88,15 @@ public class WorldParser {
         this.player.sendMessage(MiniMessage.miniMessage().deserialize("<dark_purple><b>(5/8)</b> <white>Parsing complete..."));
         this.player.sendMessage(MiniMessage.miniMessage().deserialize("<dark_purple><b>(6/8)</b> <white>Unloading world..."));
         Bukkit.unloadWorld(clonedWorld, true);
-        new File(targetFile, "session.lock").delete();
-        new File(targetFile, "uid.dat").delete();
 
-        try (final Writer writer = new OutputStreamWriter(new FileOutputStream(new File(Bukkit.getWorldContainer() + "/" + this.mapName, "dataPoints.json")), StandardCharsets.UTF_8)) {
-            this.player.sendMessage(MiniMessage.miniMessage().deserialize("<dark_purple><b>(7/8)</b> <white>Saving dataPoint.json..."));
-            gson.toJson(this.dataPointInfo.getDataPoints(), writer);
-        } catch (IOException e) {
-            throw new RuntimeException("Saving dataPoints.json", e);
-        }
-
-        final File templatesTarget = new File(TEMPLATES_FOLDER, this.mapName);
-        FileUtils.deleteDirectory(templatesTarget);
-        FileUtils.moveDirectory(targetFile, templatesTarget);
+        this.dataPointInfo.export(this.player, targetFile);
+        this.plugin.getSavingStrategy().save(targetFile);
 
         onComplete.run();
     }
 
     private File clonedFile() {
-        return new File(Bukkit.getWorldContainer(), this.mapName);
+        return new File(Bukkit.getWorldContainer(), this.gameName.toUpperCase(Locale.ROOT) + "-" + this.mapName.toUpperCase(Locale.ROOT));
     }
 
     @SneakyThrows

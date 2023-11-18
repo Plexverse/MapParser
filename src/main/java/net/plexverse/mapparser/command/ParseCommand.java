@@ -30,23 +30,24 @@ public class ParseCommand implements CommandExecutor {
             return true;
         }
 
-        if (args.length != 3) {
-            player.sendMessage(this.miniMessage.deserialize("<red>Usage: <white>/parse <mapName> <builder> <radiusInBlocks>"));
+        if (args.length != 4) {
+            player.sendMessage(this.miniMessage.deserialize("<red>Usage: <white>/parse <game> <mapName> <builder> <radiusInBlocks>"));
             return true;
         }
 
-        final String mapName = args[0];
-        final String builder = args[1];
+        final String gameName = args[0];
+        final String mapName = args[1];
+        final String builder = args[2];
         final int radius;
         try {
-            radius = Integer.parseInt(args[2]);
+            radius = Integer.parseInt(args[3]);
         } catch (NumberFormatException exception) {
             player.sendMessage(this.miniMessage.deserialize("<red>Invalid radius. (E.g. 50, 100, 150)"));
             return true;
         }
 
         player.sendMessage(MiniMessage.miniMessage().deserialize("<dark_purple><b>(0/8)</b> <white>Parsing map for datapoints"));
-        new WorldParser(player, mapName, builder, radius).parse(() -> {
+        new WorldParser(this.plugin, player, gameName, mapName, builder, radius).parse(() -> {
             player.sendMessage(MiniMessage.miniMessage().deserialize("<dark_purple><b>(8/8)</b> <white>Parsing map " + mapName + " has been completed and saved in the /templates/ directory."));
         });
         return true;
