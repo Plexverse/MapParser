@@ -35,7 +35,7 @@ public class DataPointInfo {
         try (final Writer writer = new OutputStreamWriter(new FileOutputStream(new File(targetFile, "mapMeta.json")), StandardCharsets.UTF_8)) {
             GSON.toJson(this.mapMeta, writer);
         } catch (IOException e) {
-            throw new RuntimeException("Saving dataPoints.json", e);
+            throw new RuntimeException("Saving mapMeta.json", e);
         }
 
         try (final Writer writer = new OutputStreamWriter(new FileOutputStream(new File(targetFile, "dataPoints.json")), StandardCharsets.UTF_8)) {

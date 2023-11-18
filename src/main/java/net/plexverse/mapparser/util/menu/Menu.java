@@ -146,8 +146,6 @@ public abstract class Menu implements InventoryHolder, Closeable {
 
     public void overrideButtonState(ItemStack stack, String state) {
         OVERRIDDEN_STATES.put(state, stack);
-
-        System.out.println("Added Overridden State: " + state);
     }
 
     @Nullable

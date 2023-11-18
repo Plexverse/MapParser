@@ -39,7 +39,7 @@ public class ZipSavingStrategy implements SavingStrategy {
              final ZipOutputStream zos = new ZipOutputStream(fileOutputStream)
         ) {
             for (final String file : fileList) {
-                final ZipEntry entry = new ZipEntry(replace(file.replace(source.getCanonicalPath(), "")));
+                final ZipEntry entry = new ZipEntry(this.replace(file.replace(source.getCanonicalPath(), "")));
                 zos.putNextEntry(entry);
                 try (final FileInputStream inputStream = new FileInputStream(file)) {
                     int length;
@@ -67,8 +67,7 @@ public class ZipSavingStrategy implements SavingStrategy {
             assert subNode != null;
 
             for (final String name : subNode) {
-                System.out.println(name);
-                generateFileList(fileList, new File(node, name), ignore);
+                this.generateFileList(fileList, new File(node, name), ignore);
             }
 
             return;

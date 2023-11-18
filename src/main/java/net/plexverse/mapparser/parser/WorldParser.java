@@ -114,11 +114,11 @@ public class WorldParser {
         }
 
         this.player.sendMessage(MiniMessage.miniMessage().deserialize("<dark_purple><b>(3/8)</b> <white>Loading new world into server..."));
-        return this.loadNewWorld();
+        return this.loadNewWorld(targetFile.getName());
     }
 
-    private World loadNewWorld() {
-        final WorldCreator worldCreator = WorldCreator.name(this.mapName);
+    private World loadNewWorld(String worldName) {
+        final WorldCreator worldCreator = WorldCreator.name(worldName);
         worldCreator.environment(this.world.getEnvironment())
             .seed(this.world.getSeed());
 
