@@ -5,3 +5,5 @@ main: net.plexverse.mapparser.MapParser
 commands:
   parse:
     description: Parses a world for datapoints.
+  kitcreator:
+    description: Opens a menu to create a kit using your inventory contents.

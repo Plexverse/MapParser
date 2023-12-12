@@ -49,8 +49,9 @@ public class WorldParser {
         this.radius = radius;
 
         this.dataPointInfo = new DataPointInfo();
+        this.dataPointInfo.addMapMeta("mapName", mapName);
         this.dataPointInfo.addMapMeta("gameType", gameName.toUpperCase(Locale.ROOT));
-        this.dataPointInfo.addMapMeta("builder", builder);
+        this.dataPointInfo.addMapMeta("author", builder);
     }
 
     @SneakyThrows
@@ -132,7 +133,7 @@ public class WorldParser {
 
             final String dataPointName = persistentDataContainer.get(Keys.DATAPOINT_KEY, PersistentDataType.STRING);
             final DataPointType dataPointType = DataPointType.valueOf(dataPointName.toUpperCase(Locale.ROOT));
-            dataPointType.parse(this.dataPointInfo, entity, persistentDataContainer);
+            dataPointType.parse(this.player, this.dataPointInfo, entity, persistentDataContainer);
             entity.remove();
         }
     }

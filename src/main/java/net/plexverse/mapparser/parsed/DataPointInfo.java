@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import lombok.Data;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.plexverse.mapparser.enums.DataPointType;
-import net.plexverse.mapparser.enums.Team;
+import net.plexverse.mapparser.objects.Team;
 import org.bukkit.entity.Player;
 
 import java.io.*;
@@ -30,7 +30,7 @@ public class DataPointInfo {
     }
 
     public void addDataType(DataPointType dataPointType, Team team, double x, double y, double z, float yaw, float pitch) {
-        this.dataPoints.computeIfAbsent(dataPointType.name() + (team != null ? "_" + team.name() : ""), ($) -> new HashSet<>()).add(new WorldLocation(x, y, z, yaw, pitch));
+        this.dataPoints.computeIfAbsent(dataPointType.name() + (team != null ? "_" + team.getId() : ""), ($) -> new HashSet<>()).add(new WorldLocation(x, y, z, yaw, pitch));
     }
 
     public void export(Player player, File targetFile) {

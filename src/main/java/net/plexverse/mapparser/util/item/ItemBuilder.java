@@ -4,11 +4,13 @@ import com.google.common.collect.Lists;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.plexverse.mapparser.util.message.Replacer;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Arrays;
@@ -124,7 +126,13 @@ public class ItemBuilder {
     }
 
     public <T> ItemBuilder persistentData(NamespacedKey key, PersistentDataType<?, T> type, T value) {
-        return this.transformMeta(meta -> meta.getPersistentDataContainer().set(key, type, value));
+        return this.transformMeta(meta -> {
+            if (value == null) {
+                return;
+            }
+
+            meta.getPersistentDataContainer().set(key, type, value);
+        });
     }
 
     public <T> ItemBuilder persistentData(NamespacedKey key, String value) {
@@ -154,6 +162,17 @@ public class ItemBuilder {
 
     public ItemBuilder name(String name) {
         return this.name(MiniMessage.miniMessage().deserialize(name));
+    }
+
+    public ItemBuilder color(Color color) {
+        return this.transform(itemStack -> {
+            Material type = itemStack.getType();
+            if (type == Material.LEATHER_BOOTS || type == Material.LEATHER_CHESTPLATE || type == Material.LEATHER_HELMET || type == Material.LEATHER_LEGGINGS) {
+                LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
+                meta.setColor(color);
+                itemStack.setItemMeta(meta);
+            }
+        });
     }
 
     public ItemBuilder replace(Replacer replacer) {

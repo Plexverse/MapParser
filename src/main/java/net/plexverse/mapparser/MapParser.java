@@ -1,7 +1,9 @@
 package net.plexverse.mapparser;
 
+import net.plexverse.mapparser.command.KitCreatorCommand;
 import net.plexverse.mapparser.command.ParseCommand;
 import net.plexverse.mapparser.listener.ArmorStandListener;
+import net.plexverse.mapparser.listener.SpawnListener;
 import net.plexverse.mapparser.saving.SavingStrategy;
 import net.plexverse.mapparser.saving.zip.ZipSavingStrategy;
 import net.plexverse.mapparser.util.menu.MenuListeners;
@@ -24,10 +26,12 @@ public class MapParser extends JavaPlugin {
 
     private void initCommands() {
         this.getCommand("parse").setExecutor(new ParseCommand(this));
+        this.getCommand("kitcreator").setExecutor(new KitCreatorCommand());
     }
 
     private void initListeners() {
         new MenuListeners();
+        new SpawnListener();
         new ArmorStandListener();
     }
 }
