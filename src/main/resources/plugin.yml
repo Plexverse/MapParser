@@ -7,3 +7,5 @@ commands:
     description: Parses a world for datapoints.
   kitcreator:
     description: Opens a menu to create a kit using your inventory contents.
+  togglearmorstand:
+    description: Toggles armor stand visibility
