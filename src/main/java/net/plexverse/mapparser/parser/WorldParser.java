@@ -5,6 +5,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.plexverse.mapparser.MapParser;
 import net.plexverse.mapparser.constant.Keys;
 import net.plexverse.mapparser.enums.DataPointType;
+import net.plexverse.mapparser.enums.GameType;
 import net.plexverse.mapparser.parsed.DataPointInfo;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
@@ -15,9 +16,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class WorldParser {
     private final MapParser plugin;
@@ -79,6 +78,30 @@ public class WorldParser {
                 this.player.sendActionBar(MiniMessage.miniMessage().deserialize("<dark_purple><b>Parsing Chunks:</b> <white>" + chunkCount + "<light_purple>/<white>" + totalChunks));
             }
         }
+
+        this.player.sendMessage(MiniMessage.miniMessage().deserialize("<dark_purple><b>(4/8)</b> <white>Checking datapoint requirements are met..."));
+        final Map<String, Integer> datapointAmount = new HashMap<>();
+        dataPointInfo.getDataPoints().keySet().forEach(datapoint -> {
+            datapointAmount.put(datapoint, dataPointInfo.getDataPoints().get(datapoint).size());
+            System.out.println(datapoint);
+            System.out.println(dataPointInfo.getDataPoints().get(datapoint).size());
+        });
+
+        final Map<String, Integer> requirements = GameType.valueOf(gameName.toUpperCase()).getRequirements();
+        for (String dataPointType : requirements.keySet()) {
+            if(!datapointAmount.containsKey(dataPointType)) {
+                this.player.sendMessage(MiniMessage.miniMessage().deserialize("<red><b>(!!)</b> <white>No " + dataPointType + " datapoint(s) found..."));
+                Bukkit.unloadWorld(clonedWorld, true);
+                return;
+            }
+            if(datapointAmount.get(dataPointType) < requirements.get(dataPointType)) {
+                this.player.sendMessage(MiniMessage.miniMessage().deserialize("<red><b>(!!)</b> <white>Not enough " + dataPointType + " datapoint(s) found..."));
+                this.player.sendMessage(MiniMessage.miniMessage().deserialize("<red><b>(!!)</b> <white>"+requirements.get(dataPointType)+ " are required, only " + datapointAmount.get(dataPointType) + " found!"));
+                Bukkit.unloadWorld(clonedWorld, true);
+                return;
+            }
+        }
+
 
         this.player.sendMessage(MiniMessage.miniMessage().deserialize("<dark_purple><b>(5/8)</b> <white>Parsing complete..."));
         this.player.sendMessage(MiniMessage.miniMessage().deserialize("<dark_purple><b>(6/8)</b> <white>Unloading world..."));

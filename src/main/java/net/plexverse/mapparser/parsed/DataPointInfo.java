@@ -3,6 +3,7 @@ package net.plexverse.mapparser.parsed;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Data;
+import lombok.Getter;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.plexverse.mapparser.enums.DataPointType;
 import net.plexverse.mapparser.objects.Team;
@@ -17,7 +18,10 @@ import java.util.Set;
 
 public class DataPointInfo {
     private final Map<String, String> mapMeta;
+
+    @Getter
     private final Map<String, Set<WorldLocation>> dataPoints;
+
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().setLenient().enableComplexMapKeySerialization().create();
 
     public DataPointInfo() {
@@ -49,7 +53,7 @@ public class DataPointInfo {
     }
 
     @Data
-    private class WorldLocation {
+    public class WorldLocation {
         private final double x;
         private final double y;
         private final double z;
