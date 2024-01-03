@@ -26,6 +26,7 @@ public class WorldParser {
     private final String mapName;
     private final String gameName;
     private final int radius;
+    private final boolean legacy;
 
     private final DataPointInfo dataPointInfo;
 
@@ -38,7 +39,7 @@ public class WorldParser {
         "stats"
     );
 
-    public WorldParser(MapParser plugin, Player player, String gameName, String mapName, String builder, int radius) {
+    public WorldParser(MapParser plugin, Player player, String gameName, String mapName, String builder, int radius, boolean legacy) {
         this.plugin = plugin;
         this.player = player;
         this.centerLocation = player.getLocation();
@@ -46,11 +47,13 @@ public class WorldParser {
         this.gameName = gameName;
         this.mapName = mapName;
         this.radius = radius;
+        this.legacy = legacy;
 
         this.dataPointInfo = new DataPointInfo();
         this.dataPointInfo.addMapMeta("mapName", mapName);
-        this.dataPointInfo.addMapMeta("gameType", gameName.toUpperCase(Locale.ROOT));
+        this.dataPointInfo.addMapMeta("gameType", gameName.toUpperCase());
         this.dataPointInfo.addMapMeta("author", builder);
+        this.dataPointInfo.addMapMeta("legacy", String.valueOf(legacy));
     }
 
     @SneakyThrows
