@@ -16,6 +16,10 @@ public enum GameType {
             microBattlesRequirements(),
             "Micro Battles"
     ),
+    SPEED_BUILDERS(
+            speedBuildersRequirements(),
+            "Speed Builders"
+    ),
     LOBBY(
             Map.of(SPAWNPOINT.name(), 4, HOLOGRAM.name(), 1, BORDER.name(), 2),
             "Lobby"
@@ -41,6 +45,18 @@ public enum GameType {
         result.put("WALLPOINT_YELLOW", 10);
         result.put("SPECTATOR_SPAWNPOINT", 1);
         result.put("BORDER", 2);
+        return result;
+    }
+
+    private static Map<String, Integer> speedBuildersRequirements() {
+        final Map<String, Integer> result = new HashMap<>();
+        for(int i = 1; i < 8; i++) {
+            result.put("SPAWNPOINT_" + i, 2);
+            result.put("ISLAND_BORDER_" + i, 2);
+        }
+        result.put("CENTER", 2);
+        result.put("BORDERS", 2);
+        result.put("SPECTATOR_SPAWNPOINT", 1);
         return result;
     }
 

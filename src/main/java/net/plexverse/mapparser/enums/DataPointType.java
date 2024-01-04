@@ -16,6 +16,7 @@ public enum DataPointType {
     WALLPOINT(-1, true, false),
     SPECTATOR_SPAWNPOINT(0, false, true),
     ISLAND_BORDER(0, true, true),
+    CENTER(0, false, false),
     BORDER(0, false, false);
 
     private final int yDiff;

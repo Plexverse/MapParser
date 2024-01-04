@@ -100,6 +100,16 @@ public class Menus {
                     "<gray><i>(( Click to define as a Mid Chest ))"
                 ).build()
             ).build()
+        ).item(new ConfigurableMenuButton.Builder()
+            .name("center")
+            .key('C')
+            .defaultItem(ItemBuilder.create(Material.BARRIER)
+                .name("<light_purple><b>Center</b>")
+                .lore(
+                    "",
+                            "<gray><i>(( Click to define the Center Point ))"
+                ).build()
+            ).build()
         ).build();
 
     public static final ConfigurableMenu MODIFY_MENU = new ConfigurableMenu.Builder()

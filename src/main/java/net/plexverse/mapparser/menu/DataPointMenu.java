@@ -28,6 +28,7 @@ public class DataPointMenu extends Menu {
         this.onClick("border", (event) -> this.defineEntity(DataPointType.BORDER));
         this.onClick("spectator-spawnpoint", (event) -> this.defineEntity(DataPointType.SPECTATOR_SPAWNPOINT));
         this.onClick("wall-base", (event) -> this.defineEntity(DataPointType.WALLPOINT));
+        this.onClick("center", (event) -> this.defineEntity(DataPointType.CENTER));
     }
 
     private void defineEntity(DataPointType dataPointType) {
