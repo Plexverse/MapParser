@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
     <profiles>
         <profile>
             <id>mineplex-mineplex-studio-partners</id>
@@ -23,7 +19,8 @@
         <server>
             <id>mineplex-mineplex-studio-partners</id>
             <username>aws</username>
-            <password>${env.CODEARTIFACT_AUTH_TOKEN}</password>
+            <password>eyJ2ZXIiOjEsImlzdSI6MTcwMzg5NDkzNiwiZW5jIjoiQTEyOEdDTSIsInRhZyI6IkdOYm5ZcDhRZnp3RDFYR2pBMk5yV0EiLCJleHAiOjE3MDM5MzgxMzYsImFsZyI6IkExMjhHQ01LVyIsIml2IjoiX2RWaXgtMThhQ2ZLdzFjbyJ9.Tsz9cbXAvbEyKQW1fuBmqA.ihv9XjZj_djTsY2j.BEcSwBzLph8b9qg6fNxTN1MkGzUY0ExaWJCvn6YYIY5irOeyw-JVwtaSr1_eXi0ZgtJybfEaI5nd0wgNskQRnFlG0O7_TBcB6DCLynWvFg56v-f381HNuzte-cC4zV5NjcLo6aLu6Go8ubQrwN5r1sg7ccXTUUaSszuo03QOqwg5co8IhokCwYmnb5eHECB2-OzQ-rUw0IYrR9S-4dQ2PIG_W_Dl0I4ZySPKqMjPmHIkWCzUagkR44WKUx1t9_Ven42hvvjZvc5QKs1gNmSB5WFecg0KOyXe7Q5IOZevNVy1KGaT0f_r9e0o0uOoiOL6eCetKmDb75qvppSOxNP020jokB3FLm3YKnmG94TYhY-cPX0blRR78JfF68iqGGRoLrVY59XHfaf5kTbORgaMYYciLOPTviZtkwaRLjbu15hx7kKdyoJWc3v5XZYK4PEJEewEK4I_SIZyKGl9Qmld3D0v6wPhCp8t0PJ8BmvLRjnGGJs0UkM71mmTBGpZ05RLcMMvKAbJnq1hsBpAq4EC5f9byguHkZF7ubBVk8hBpHjFPtNkDEurP4_qkLFqhgdDAZGYy8mHX2xOBPx_2nU7MJnYsHs0YLaRB8ikGKUAr22hNAYccWdRYp2MlR3s9Dzn7bqmxe-xcSdWhX7hbuOyoJVzy5ONVISGhmUOsftDaWTdPjA5d3zkHqhF2i46lgPolwgat20OcR8Kv56nH_-ktzwyb7fD08eiqqw51oB8q71d7mBfMNJcespd4h10uylySlxZK2iW2pfoFNQ_iSfLIWoeKjodaZ8A0XMs2ai7bv5pY4uxTu3cBGKdrrb1kDVM0ZdU_3BT4SeWP_LpmgDQXc8Jp8t__43eBKq8cymmPHvanrti-u29AHkRYVByTbJ8SqXnZz-uI8E6NP8BAPk.lFs2uYeaDypc5yFIM-81Ig&#13;
+            </password>
         </server>
     </servers>
 </settings>

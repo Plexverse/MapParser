@@ -53,9 +53,10 @@ public enum GameType {
         for(int i = 1; i < 8; i++) {
             result.put("SPAWNPOINT_" + i, 2);
             result.put("ISLAND_BORDER_" + i, 2);
+            result.put("ISLAND_BUILD_BORDER", 2);
         }
         result.put("CENTER", 2);
-        result.put("BORDERS", 2);
+        result.put("BORDER", 2);
         result.put("SPECTATOR_SPAWNPOINT", 1);
         return result;
     }

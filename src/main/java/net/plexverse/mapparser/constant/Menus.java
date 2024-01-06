@@ -110,6 +110,16 @@ public class Menus {
                             "<gray><i>(( Click to define the Center Point ))"
                 ).build()
             ).build()
+            ).item(new ConfigurableMenuButton.Builder()
+                    .name("island-build-border")
+                    .key('C')
+                    .defaultItem(ItemBuilder.create(Material.BARRIER)
+                            .name("<light_purple><b>Island Build Borders</b>")
+                            .lore(
+                                    "",
+                                    "<gray><i>(( Click to define the build borders ))"
+                            ).build()
+                    ).build()
         ).build();
 
     public static final ConfigurableMenu MODIFY_MENU = new ConfigurableMenu.Builder()
