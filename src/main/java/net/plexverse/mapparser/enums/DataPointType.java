@@ -27,7 +27,7 @@ public enum DataPointType {
     BORDER("Border", false, false, Material.BARRIER),
     ISLAND_BUILD_BORDER("Island Build Border", false, false, Material.DIAMOND_PICKAXE),
     MINIBUILD("Mini Build", false, false, Material.EMERALD_BLOCK),
-    MOB("Mob", false, false, Material.ZOMBIE_SPAWN_EGG);
+    MOB("Mob", false, true, Material.ZOMBIE_SPAWN_EGG);
 
     private final String menuName;
     private int yDiff = 0;
