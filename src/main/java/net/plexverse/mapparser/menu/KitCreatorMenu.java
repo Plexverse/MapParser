@@ -1,25 +1,6 @@
 package net.plexverse.mapparser.menu;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mineplex.studio.jackson.MineplexJacksonModule;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.plexverse.mapparser.constant.Menus;
-import net.plexverse.mapparser.enums.GameType;
-import net.plexverse.mapparser.util.asker.InputAsker;
-import net.plexverse.mapparser.util.menu.Menu;
-import net.plexverse.mapparser.util.menu.state.MenuAction;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
+/***
 public class KitCreatorMenu extends Menu {
     private String kitName;
     private GameType gameType;
@@ -93,4 +74,4 @@ public class KitCreatorMenu extends Menu {
         OBJECT_MAPPER = new ObjectMapper();
         OBJECT_MAPPER.registerModule(new MineplexJacksonModule());
     }
-}
+}***/

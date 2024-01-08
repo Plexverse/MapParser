@@ -64,17 +64,23 @@
       <url>https://jitpack.io</url>
     </repository>
     <repository>
-      <id>xenondevs</id>
-      <name>Xenondevs</name>
-      <url>https://repo.xenondevs.xyz/releases</url>
-    </repository>
-    <repository>
       <id>mineplex-mineplex-studio-partners</id>
       <name>mineplex-mineplex-studio-partners</name>
       <url>https://mineplex-003539567218.d.codeartifact.us-east-1.amazonaws.com/maven/mineplex-studio-partners/</url>
     </repository>
+    <repository>
+      <id>xenondevs</id>
+      <url>https://repo.xenondevs.xyz/releases</url>
+    </repository>
   </repositories>
   <dependencies>
+    <dependency>
+      <groupId>xyz.xenondevs.invui</groupId>
+      <artifactId>invui</artifactId>
+      <version>1.24</version>
+      <type>pom</type>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>io.papermc.paper</groupId>
       <artifactId>paper-api</artifactId>

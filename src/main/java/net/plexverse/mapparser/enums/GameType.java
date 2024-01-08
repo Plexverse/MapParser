@@ -1,8 +1,8 @@
 package net.plexverse.mapparser.enums;
 
 import lombok.Getter;
+import org.bukkit.Material;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,19 +14,33 @@ public enum GameType {
 
     MICRO_BATTLES(
             microBattlesRequirements(),
-            "Micro Battles"
+            "Micro Battles",
+            List.of(SPAWNPOINT, HOLOGRAM, SPECTATOR_SPAWNPOINT, BORDER, WALLPOINT),
+            Material.GLASS
     ),
     SPEED_BUILDERS(
             speedBuildersRequirements(),
-            "Speed Builders"
+            "Speed Builders",
+            List.of(SPAWNPOINT, HOLOGRAM, ISLAND_BORDER, ISLAND_BUILD_BORDER, CENTER, BORDER, SPECTATOR_SPAWNPOINT),
+            Material.GUARDIAN_SPAWN_EGG
+    ),
+    SPEED_BUILDERS_MINIBUILDS(
+            Map.of("MINIBUILD", 1, "MOB", 1),
+            "SB Minibuilds",
+            List.of(MOB, MINIBUILD),
+            Material.DIAMOND_PICKAXE
     ),
     LOBBY(
             Map.of(SPAWNPOINT.name(), 4, HOLOGRAM.name(), 1, BORDER.name(), 2),
-            "Lobby"
+            "Lobby",
+            List.of(SPAWNPOINT, HOLOGRAM, BORDER),
+            Material.BEACON
     ),
     SKYWARS(
             skywarsRequirements(),
-            "Skywars"
+            "Skywars",
+            List.of(SPAWNPOINT, CHEST, HOLOGRAM, CHEST_MID, ISLAND_BORDER, BORDER, SPECTATOR_SPAWNPOINT),
+            Material.FEATHER
     );
 
     private static Map<String, Integer> microBattlesRequirements() {
@@ -50,12 +64,13 @@ public enum GameType {
 
     private static Map<String, Integer> speedBuildersRequirements() {
         final Map<String, Integer> result = new HashMap<>();
-        for(int i = 1; i < 8; i++) {
+        for(int i = 1; i <= 8; i++) {
             result.put("SPAWNPOINT_" + i, 2);
             result.put("ISLAND_BORDER_" + i, 2);
-            result.put("ISLAND_BUILD_BORDER", 2);
+            result.put("ISLAND_BUILD_BORDER_" + i, 2);
+            result.put("HOLOGRAM_" + i, 2);
         }
-        result.put("CENTER", 2);
+        result.put("CENTER", 1);
         result.put("BORDER", 2);
         result.put("SPECTATOR_SPAWNPOINT", 1);
         return result;
@@ -63,7 +78,7 @@ public enum GameType {
 
     private static Map<String, Integer> skywarsRequirements() {
         final Map<String, Integer> result = new HashMap<>();
-        for(int i = 1; i < 13; i++) {
+        for(int i = 1; i <= 12; i++) {
             result.put("SPAWNPOINT_" + i, 2);
             result.put("HOLOGRAM_" + i, 1);
             result.put("CHEST_" + i, 3);
@@ -76,14 +91,17 @@ public enum GameType {
     }
 
     private final Map<String, Integer> requirements;
-    @Getter
     private final String displayName;
+    private final List<DataPointType> dataPointTypeList;
+    private final Material material;
 
     private static final GameType[] VALUES = values();
 
-    GameType(Map<String, Integer> requirements, String displayName) {
+    GameType(Map<String, Integer> requirements, String displayName, List<DataPointType> dataPointTypeList, Material material) {
         this.requirements = requirements;
         this.displayName = displayName;
+        this.dataPointTypeList = dataPointTypeList;
+        this.material = material;
     }
 
     public static GameType getNextGameType(GameType gameType) {

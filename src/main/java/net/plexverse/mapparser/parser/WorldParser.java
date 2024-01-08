@@ -24,7 +24,7 @@ public class WorldParser {
     private final Location centerLocation;
     private final World world;
     private final String mapName;
-    private final String gameName;
+    private final GameType gameName;
     private final int radius;
     private final boolean legacy;
 
@@ -39,7 +39,7 @@ public class WorldParser {
         "stats"
     );
 
-    public WorldParser(MapParser plugin, Player player, String gameName, String mapName, String builder, int radius, boolean legacy) {
+    public WorldParser(MapParser plugin, Player player, GameType gameName, String mapName, String builder, int radius, boolean legacy) {
         this.plugin = plugin;
         this.player = player;
         this.centerLocation = player.getLocation();
@@ -51,7 +51,7 @@ public class WorldParser {
 
         this.dataPointInfo = new DataPointInfo();
         this.dataPointInfo.addMapMeta("mapName", mapName);
-        this.dataPointInfo.addMapMeta("gameType", gameName.toUpperCase());
+        this.dataPointInfo.addMapMeta("gameType", gameName.name());
         this.dataPointInfo.addMapMeta("author", builder);
         this.dataPointInfo.addMapMeta("legacy", String.valueOf(legacy));
     }
@@ -90,7 +90,7 @@ public class WorldParser {
             System.out.println(dataPointInfo.getDataPoints().get(datapoint).size());
         });
 
-        final Map<String, Integer> requirements = GameType.valueOf(gameName.toUpperCase()).getRequirements();
+        final Map<String, Integer> requirements = gameName.getRequirements();
         for (String dataPointType : requirements.keySet()) {
             if(!datapointAmount.containsKey(dataPointType)) {
                 this.player.sendMessage(MiniMessage.miniMessage().deserialize("<red><b>(!!)</b> <white>No " + dataPointType + " datapoint(s) found..."));
@@ -117,7 +117,7 @@ public class WorldParser {
     }
 
     private File clonedFile() {
-        return new File(Bukkit.getWorldContainer(), this.gameName.toUpperCase(Locale.ROOT) + "-" + this.mapName.toUpperCase(Locale.ROOT));
+        return new File(Bukkit.getWorldContainer(), this.gameName.name() + "-" + this.mapName.toUpperCase(Locale.ROOT));
     }
 
     @SneakyThrows
@@ -159,7 +159,7 @@ public class WorldParser {
 
             final String dataPointName = persistentDataContainer.get(Keys.DATAPOINT_KEY, PersistentDataType.STRING);
             final DataPointType dataPointType = DataPointType.valueOf(dataPointName.toUpperCase(Locale.ROOT));
-            dataPointType.parse(this.player, this.dataPointInfo, entity, persistentDataContainer);
+            dataPointType.parse(this.dataPointInfo, entity, persistentDataContainer);
             entity.remove();
         }
     }

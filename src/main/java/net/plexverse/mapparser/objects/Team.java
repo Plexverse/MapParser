@@ -1,39 +1,33 @@
 package net.plexverse.mapparser.objects;
 
+import lombok.Data;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Color;
+import org.bukkit.Material;
 
 import java.util.*;
 
+@Data
 public class Team {
     private final String id;
     private final String displayName;
     private final Color helmetColor;
+    private final Material material;
 
     private static final Map<String, Team> PREDEFINED_TEAMS = new HashMap<>();
-    public static final Team AQUA = new Team("AQUA", "<blue>Aqua", Color.AQUA);
-    public static final Team RED = new Team("RED", "<red>Red", Color.RED);
-    public static final Team GREEN = new Team("GREEN", "<green>Green", Color.GREEN);
-    public static final Team YELLOW = new Team("YELLOW", "<yellow>Yellow", Color.YELLOW);
+    public static final Team AQUA = new Team("AQUA", "<blue>Aqua", Color.AQUA, Material.BLUE_BED);
+    public static final Team RED = new Team("RED", "<red>Red", Color.RED, Material.RED_BED);
+    public static final Team GREEN = new Team("GREEN", "<green>Green", Color.GREEN, Material.GREEN_BED);
+    public static final Team YELLOW = new Team("YELLOW", "<yellow>Yellow", Color.YELLOW, Material.YELLOW_BED);
     public static final List<Team> VALUES = Arrays.asList(AQUA, RED, GREEN, YELLOW);
 
-    public Team(String id, String displayName, Color helmetColor) {
+    public Team(String id, String displayName, Color helmetColor, Material material) {
         this.id = id.toUpperCase(Locale.ROOT);
         this.displayName = displayName;
         this.helmetColor = helmetColor;
+        this.material = material;
         PREDEFINED_TEAMS.put(this.id, this);
-    }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public String getDisplayName() {
-        return this.displayName;
-    }
-
-    public Color getHelmetColor() {
-        return this.helmetColor;
     }
 
     @Override
@@ -57,6 +51,6 @@ public class Team {
 
     public static Team getExistingOrCreate(String teamId) {
         final Team existing = PREDEFINED_TEAMS.get(teamId.toUpperCase(Locale.ROOT));
-        return existing == null ? new Team(teamId, StringUtils.capitalize(teamId), Color.WHITE) : existing;
+        return existing == null ? new Team(teamId, StringUtils.capitalize(teamId), Color.WHITE, Material.WHITE_BED) : existing;
     }
 }

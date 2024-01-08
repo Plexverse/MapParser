@@ -9,3 +9,5 @@ commands:
     description: Opens a menu to create a kit using your inventory contents.
   togglearmorstand:
     description: Toggles armor stand visibility
+  mapsettings:
+    description: Change a maps' settings

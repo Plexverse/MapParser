@@ -1,44 +1,65 @@
 package net.plexverse.mapparser.menu;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.plexverse.mapparser.MapParser;
 import net.plexverse.mapparser.constant.Keys;
-import net.plexverse.mapparser.constant.Menus;
 import net.plexverse.mapparser.enums.DataPointType;
-import net.plexverse.mapparser.util.menu.Menu;
+import net.plexverse.mapparser.enums.GameType;
+import net.plexverse.mapparser.mapsettings.MapSettingsManager;
+import net.plexverse.mapparser.menu.items.ClickableItem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
+import xyz.xenondevs.invui.item.Item;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import xyz.xenondevs.invui.window.Window;
 
-public class DataPointMenu extends Menu {
-    private final LivingEntity armorStandEntity;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-    public DataPointMenu(Player player, LivingEntity armorStandEntity) {
-        super(player, Menus.DATA_POINT_MENU);
-        this.armorStandEntity = armorStandEntity;
+public class DataPointMenu extends PagedMenu {
 
-        this.onClick();
+    public static List<Item> itemList(final LivingEntity armorStandEntity, final GameType gameType) {
+        final List<Item> items = new ArrayList<>();
+        Arrays.stream(DataPointType.values()).filter(dataPointType -> gameType.getDataPointTypeList().contains(dataPointType)).toList().forEach(dataPointType -> {
+            final ItemBuilder itemBuilder = new ItemBuilder(dataPointType.getMaterial());
+            itemBuilder.setDisplayName("§d§l" + dataPointType.getMenuName());
+            itemBuilder.addLoreLines("§7", "§7Click to set this datapoints as a §f" + dataPointType.getMenuName());
+            final ClickableItem simpleItem = new ClickableItem(itemBuilder, (player) -> {
+                defineEntity(armorStandEntity, player, dataPointType);
+                return null;
+            });
+            items.add(simpleItem);
+        });
+        return items;
     }
 
-    private void onClick() {
-        this.onClick("spawnpoint", (event) -> this.defineEntity(DataPointType.SPAWNPOINT));
-        this.onClick("chest", (event) -> this.defineEntity(DataPointType.CHEST));
-        this.onClick("mid-chest", (event) -> this.defineEntity(DataPointType.CHEST_MID));
-        this.onClick("hologram", (event) -> this.defineEntity(DataPointType.HOLOGRAM));
-        this.onClick("island-border", (event) -> this.defineEntity(DataPointType.ISLAND_BORDER));
-        this.onClick("border", (event) -> this.defineEntity(DataPointType.BORDER));
-        this.onClick("spectator-spawnpoint", (event) -> this.defineEntity(DataPointType.SPECTATOR_SPAWNPOINT));
-        this.onClick("wall-base", (event) -> this.defineEntity(DataPointType.WALLPOINT));
-        this.onClick("center", (event) -> this.defineEntity(DataPointType.CENTER));
-        this.onClick("island-build-border", (event) -> this.defineEntity(DataPointType.ISLAND_BUILD_BORDER));
+    public DataPointMenu(LivingEntity armorStandEntity) throws IOException {
+        super(itemList(armorStandEntity, MapSettingsManager.getMapSettings(armorStandEntity.getWorld()).get().getGameType()));
     }
 
-    private void defineEntity(DataPointType dataPointType) {
-        this.armorStandEntity.setPersistent(true);
-        this.armorStandEntity.getPersistentDataContainer().set(Keys.DATAPOINT_KEY, PersistentDataType.STRING, dataPointType.name());
-        this.armorStandEntity.setCustomNameVisible(true);
-        this.armorStandEntity.customName(MiniMessage.miniMessage().deserialize("<red>" + dataPointType.name()));
-        this.player.sendMessage(MiniMessage.miniMessage().deserialize("<red>You have defined this armorstand as a " + dataPointType.name()));
-        this.close();
-        new ModifyMenu(this.player, this.armorStandEntity).open();
+    public static void defineEntity(final LivingEntity armorStandEntity, final Player player, DataPointType dataPointType) {
+        armorStandEntity.setPersistent(true);
+        armorStandEntity.getPersistentDataContainer().set(Keys.DATAPOINT_KEY, PersistentDataType.STRING, dataPointType.name());
+        armorStandEntity.setCustomNameVisible(true);
+        armorStandEntity.customName(MiniMessage.miniMessage().deserialize("<red>" + dataPointType.name()));
+        player.sendMessage(MiniMessage.miniMessage().deserialize("<red>You have defined this armor stand as a " + dataPointType.name()));
+
+        player.getInventory().close();
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Window.single()
+                        .setGui(new ModifyMenu(armorStandEntity, dataPointType))
+                        .setViewer(player)
+                        .build()
+                        .open();
+            }
+        }.runTaskLater(MapParser.getMapParser(), 1L);
+
     }
 }
