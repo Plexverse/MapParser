@@ -31,9 +31,9 @@ public enum GameType {
             Material.DIAMOND_PICKAXE
     ),
     LOBBY(
-            Map.of(SPAWNPOINT.name(), 4, HOLOGRAM.name(), 1, BORDER.name(), 2),
+            Map.of("SPAWNPOINT_LOBBY", 2, BORDER.name(), 2),
             "Lobby",
-            List.of(SPAWNPOINT, HOLOGRAM, BORDER),
+            List.of(SPAWNPOINT, HOLOGRAM, BORDER, INTERACT_NPC, INTERACTION, GAME_NPC, STORE_NPC, GAME_AREA, EVENT_BORDER),
             Material.BEACON
     ),
     SKYWARS(

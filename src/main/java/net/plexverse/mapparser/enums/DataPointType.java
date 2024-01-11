@@ -27,7 +27,13 @@ public enum DataPointType {
     BORDER("Border", false, false, Material.BARRIER),
     ISLAND_BUILD_BORDER("Island Build Border", false, false, Material.DIAMOND_PICKAXE),
     MINIBUILD("Mini Build", false, false, Material.EMERALD_BLOCK),
-    MOB("Mob", false, true, Material.ZOMBIE_SPAWN_EGG);
+    MOB("Mob", false, true, Material.ZOMBIE_SPAWN_EGG),
+    GAME_NPC("Game (NPC)", true, true, Material.VILLAGER_SPAWN_EGG),
+    STORE_NPC("Store (NPC)", true, true, Material.EMERALD),
+    INTERACT_NPC("Interaction (NPC)", true, true, Material.WITHER_SKELETON_SKULL),
+    INTERACTION("Interaction", true, true, Material.WITHER_SKELETON_SKULL),
+    EVENT_BORDER("Event Border", true, false, Material.LAVA_BUCKET),
+    GAME_AREA("Game Area Border", true, false, Material.BEACON),;
 
     private final String menuName;
     private int yDiff = 0;
