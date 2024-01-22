@@ -14,7 +14,7 @@ public class MapMeta {
     private boolean legacy;
 
     public MapMeta() {
-        author = null;
+        author = "null";
         gameType = GameType.SKYWARS;
         mapName = "Map Name";
         legacy = false;
