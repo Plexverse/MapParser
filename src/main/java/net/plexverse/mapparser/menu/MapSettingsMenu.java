@@ -85,6 +85,17 @@ public class MapSettingsMenu extends PagedMenu {
         final ClickableItem clickableItem = new ClickableItem(new SimpleItem(itemStack).getItemProvider(), player -> {
             AUTHOR_ASKER.ask(player, (response) -> {
                 player.getInventory().close();
+
+                if(!response.equals("null")) {
+                    try {
+                        final String[] authors = response.split(",");
+                        for (final String author : authors) UUID.fromString(author);
+                    } catch (Exception e) {
+                        player.sendMessage(ChatColor.RED + "Read the instructions carefully, uuids separated by dashes...");
+                        return;
+                    }
+                }
+
                 mapSettings.setAuthor(response);
                 try {
                     MapSettingsManager.saveMapSettings(world, mapSettings);
