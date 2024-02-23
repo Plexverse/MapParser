@@ -45,7 +45,7 @@ public enum GameType {
     MINI_BRIDGES(
         miniBridgesRequirements(),
         "MiniBridges",
-        List.of(SPAWNPOINT, CHEST_MID, ISLAND_BORDER, BORDER, BRIDGE_POINT, SPECTATOR_SPAWNPOINT),
+        List.of(SPAWNPOINT, CHEST_MID, ISLAND_BORDER, BORDER, BRIDGE_POINT, BRIDGE_TYPE, SPECTATOR_SPAWNPOINT),
         Material.IRON_PICKAXE
     );
 
@@ -117,6 +117,7 @@ public enum GameType {
         result.put("CHEST_MID", 6);
         result.put("BORDER", 2);
         result.put("SPECTATOR_SPAWNPOINT", 1);
+        result.put("BRIDGE_TYPE", 1);
 
         return result;
     }

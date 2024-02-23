@@ -34,7 +34,8 @@ public enum DataPointType {
     INTERACTION("Interaction", true, true, Material.WITHER_SKELETON_SKULL),
     EVENT_BORDER("Event Border", true, false, Material.LAVA_BUCKET),
     GAME_AREA("Game Area Border", true, false, Material.BEACON),
-    BRIDGE_POINT("Bridge Point", true, false, Material.OAK_LOG);
+    BRIDGE_POINT("Bridge Point", true, false, Material.OAK_LOG),
+    BRIDGE_TYPE("Bridge Type", true, false, Material.WATER_BUCKET);
 
     private final String menuName;
     private int yDiff = 0;
