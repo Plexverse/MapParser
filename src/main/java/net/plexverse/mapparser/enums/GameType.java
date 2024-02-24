@@ -41,6 +41,12 @@ public enum GameType {
             "Skywars",
             List.of(SPAWNPOINT, CHEST, HOLOGRAM, CHEST_MID, ISLAND_BORDER, BORDER, SPECTATOR_SPAWNPOINT),
             Material.FEATHER
+    ),
+    MINI_BRIDGES(
+        miniBridgesRequirements(),
+        "MiniBridges",
+        List.of(SPAWNPOINT, CHEST_MID, ISLAND_BORDER, BORDER, BRIDGE_POINT, BRIDGE_TYPE, SPECTATOR_SPAWNPOINT),
+        Material.IRON_PICKAXE
     );
 
     private static Map<String, Integer> microBattlesRequirements() {
@@ -87,6 +93,32 @@ public enum GameType {
         result.put("CHEST_MID", 6);
         result.put("BORDER", 2);
         result.put("SPECTATOR_SPAWNPOINT", 1);
+        return result;
+    }
+
+    private static Map<String, Integer> miniBridgesRequirements() {
+        final Map<String, Integer> result = new HashMap<>();
+        result.put("SPAWNPOINT_RED", 5);
+        result.put("SPAWNPOINT_GREEN", 5);
+        result.put("SPAWNPOINT_BLUE", 5);
+        result.put("SPAWNPOINT_YELLOW", 5);
+        result.put("BRIDGE_POINT_RED_S", 1);
+        result.put("BRIDGE_POINT_RED_E", 1);
+        result.put("BRIDGE_POINT_GREEN_S", 1);
+        result.put("BRIDGE_POINT_GREEN_E", 1);
+        result.put("BRIDGE_POINT_BLUE_S", 1);
+        result.put("BRIDGE_POINT_BLUE_E", 1);
+        result.put("BRIDGE_POINT_YELLOW_S", 1);
+        result.put("BRIDGE_POINT_YELLOW_E", 1);
+        result.put("ISLAND_BORDER_RED", 2);
+        result.put("ISLAND_BORDER_GREEN", 2);
+        result.put("ISLAND_BORDER_BLUE", 2);
+        result.put("ISLAND_BORDER_YELLOW", 2);
+        result.put("CHEST_MID", 6);
+        result.put("BORDER", 2);
+        result.put("SPECTATOR_SPAWNPOINT", 1);
+        result.put("BRIDGE_TYPE", 1);
+
         return result;
     }
 
