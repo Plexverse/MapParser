@@ -5,6 +5,7 @@ import net.plexverse.mapparser.command.MapSettingsCommand;
 import net.plexverse.mapparser.command.ParseCommand;
 import net.plexverse.mapparser.command.ToggleArmorStandCommand;
 import net.plexverse.mapparser.listener.ArmorStandListener;
+import net.plexverse.mapparser.listener.ChatListener;
 import net.plexverse.mapparser.listener.SpawnListener;
 import net.plexverse.mapparser.saving.SavingStrategy;
 import net.plexverse.mapparser.saving.zip.ZipSavingStrategy;
@@ -42,5 +43,6 @@ public class MapParser extends JavaPlugin {
     private void initListeners() {
         this.pluginManager.registerEvents(new SpawnListener(), this);
         this.pluginManager.registerEvents(new ArmorStandListener(), this);
+        this.pluginManager.registerEvents(new ChatListener(), this);
     }
 }
