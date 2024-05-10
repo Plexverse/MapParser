@@ -6,8 +6,10 @@ import net.plexverse.mapparser.constant.Keys;
 import net.plexverse.mapparser.enums.DataPointType;
 import net.plexverse.mapparser.menu.items.ClickableItem;
 import net.plexverse.mapparser.menu.items.StateItem;
+import net.plexverse.mapparser.menu.items.ext.DifficultyState;
 import net.plexverse.mapparser.menu.items.ext.TeamState;
 import net.plexverse.mapparser.objects.Team;
+import net.plexverse.mapparser.objects.minibuild.MinibuildDifficulty;
 import net.plexverse.mapparser.util.asker.InputAsker;
 import net.plexverse.mapparser.util.item.ItemBuilder;
 import net.plexverse.mapparser.util.message.Replacer;
@@ -23,20 +25,38 @@ import xyz.xenondevs.invui.item.Item;
 import xyz.xenondevs.invui.item.impl.SimpleItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
 import java.util.function.BiConsumer;
 
 @Getter
 public class ModifyMenu extends PagedMenu {
-    private final LivingEntity armorStandEntity;
-    MiniMessage miniMessage = MiniMessage.miniMessage();
-
     private static final InputAsker CUSTOM_TEAM_ASKER = new InputAsker("<light_purple>Please enter the desired team id. (E.g. 1, 2, 3, magenta, black)");
     private static final InputAsker YAW_ASKER = new InputAsker("<light_purple>Please enter the desired yaw. (E.g. -90, -45, 0, 45, 90, 180)");
     private static final InputAsker PITCH_ASKER = new InputAsker("<light_purple>Please enter the desired pitch. (E.g. -90, -45, 0, 45, 90)");
     private static final InputAsker MOB_ASKER = new InputAsker("<light_purple>Please enter the entity id. (E.g. COW, HORSE, CREEPER)");
+    private static final InputAsker NAME_ASKER = new InputAsker("<light_purple>Please enter the minibuild name");
+    private static final InputAsker CATEGORY_ASKER = new InputAsker("<light_purple>Please enter the minibuild category (e.g. emoji, video_games, animal)");
 
+    private final LivingEntity armorStandEntity;
+    MiniMessage miniMessage = MiniMessage.miniMessage();
+
+
+    public ModifyMenu(LivingEntity armorStandEntity, final DataPointType dataPointType) {
+        super(new ArrayList<>());
+        this.armorStandEntity = armorStandEntity;
+
+        setContent(getItems(dataPointType));
+
+        Replacer replacer = new Replacer();
+        replacer.replaceLiteral("%data_point%", dataPointType.name()).replaceWithSupplier("%team%", () -> {
+            final Team currentTeam = this.getCurrentTeam();
+            return this.miniMessage.deserialize(currentTeam == null ? "N/A" : currentTeam.getDisplayName());
+        });
+
+        //this.onDirectionClick();
+        //this.onCloneClick();
+    }
 
     private Team getCurrentTeam() {
         try {
@@ -50,23 +70,41 @@ public class ModifyMenu extends PagedMenu {
         }
     }
 
+    private MinibuildDifficulty getBuildDifficulty() {
+        try {
+            final String difficulty = getDataContainer().get(Keys.MINIBUILD_DIFFICULTY_KEY, PersistentDataType.STRING);
+            if (difficulty == null) {
+                return null;
+            }
+            return MinibuildDifficulty.valueOf(difficulty.toUpperCase());
+        } catch (IllegalArgumentException exception) {
+            return null;
+        }
+    }
+
     public PersistentDataContainer getDataContainer() {
         return armorStandEntity.getPersistentDataContainer();
     }
 
     public List<Item> getItems(final DataPointType dataPointType) {
         final List<Item> itemList = new ArrayList<>();
-        if(dataPointType.isHasTeam()) {
+        if (dataPointType.isHasTeam()) {
             itemList.add(getTeamStateItem(getCurrentTeam(), dataPointType));
             itemList.add(getCustomTeamItem(dataPointType));
         }
 
-        if(dataPointType.isChangeYawPitch()) {
+        if (dataPointType.isChangeYawPitch()) {
             itemList.add(getYawItem());
             itemList.add(getPitchItem());
         }
 
-        if(dataPointType == DataPointType.MOB) {
+        if (dataPointType == DataPointType.MINIBUILD) {
+            final String name = getDataContainer().get(Keys.MINIBUILD_NAME_KEY, PersistentDataType.STRING);
+            final String category = getDataContainer().get(Keys.MINIBUILD_CATEGORY_KEY, PersistentDataType.STRING);
+            itemList.addAll(getMinibuildItems(getBuildDifficulty(), name, category));
+        }
+
+        if (dataPointType == DataPointType.MOB) {
             itemList.add(getMobItem(dataPointType));
         }
 
@@ -116,9 +154,58 @@ public class ModifyMenu extends PagedMenu {
         return clickableItem;
     }
 
+    public List<Item> getMinibuildItems(final MinibuildDifficulty currentDifficulty, final String name, final String category) {
+
+        final ItemStack nameItemStack = new ItemStack(Material.NAME_TAG);
+        nameItemStack.editMeta(ItemMeta.class, itemMeta -> itemMeta.setDisplayName("Name: " + name));
+        final ClickableItem nameItem = new ClickableItem(new SimpleItem(nameItemStack).getItemProvider(), player -> {
+            NAME_ASKER.ask(player, (response) -> {
+                player.getInventory().close();
+                getDataContainer().set(Keys.MINIBUILD_NAME_KEY, PersistentDataType.STRING, response);
+                this.armorStandEntity.customName(MiniMessage.miniMessage().deserialize(response));
+                player.sendMessage(this.miniMessage.deserialize("<green>You have set the name to " + response));
+            });
+            return null;
+        });
+
+        final ItemStack categoryItemStack = new ItemStack(Material.HOPPER);
+        categoryItemStack.editMeta(ItemMeta.class, itemMeta -> itemMeta.setDisplayName("Category: " + category));
+        final ClickableItem categoryItem = new ClickableItem(new SimpleItem(categoryItemStack).getItemProvider(), player -> {
+            CATEGORY_ASKER.ask(player, (response) -> {
+                player.getInventory().close();
+                getDataContainer().set(Keys.MINIBUILD_CATEGORY_KEY, PersistentDataType.STRING, response);
+                player.sendMessage(this.miniMessage.deserialize("<green>You have set the category name to " + response));
+            });
+            return null;
+        });
+
+        final List<DifficultyState> difficultyStates = new ArrayList<>();
+        int currentIndex = 0;
+        for (MinibuildDifficulty difficulty : MinibuildDifficulty.values()) {
+            if (currentDifficulty == difficulty)
+                currentIndex = Arrays.stream(MinibuildDifficulty.values()).toList().indexOf(difficulty);
+            difficultyStates.add(new DifficultyState(difficulty));
+        }
+        difficultyStates.add(new DifficultyState(null));
+
+        final StateItem stateItem = new StateItem(difficultyStates, currentIndex, state -> {
+            final DifficultyState difficultyState = (DifficultyState) state;
+            getDataContainer().set(Keys.MINIBUILD_DIFFICULTY_KEY, PersistentDataType.STRING, difficultyState.getDifficulty().name());
+            return null;
+        });
+
+        return List.of(nameItem, categoryItem, stateItem);
+    }
+
     public Item getMobItem(final DataPointType dataPointType) {
         final ItemStack itemStack = new ItemStack(Material.OCELOT_SPAWN_EGG);
-        itemStack.editMeta(ItemMeta.class, itemMeta -> itemMeta.setDisplayName("Mob: " + getCurrentTeam()));
+        itemStack.editMeta(ItemMeta.class, itemMeta -> {
+            if (getCurrentTeam() == null) {
+                itemMeta.setDisplayName("Set mob");
+            } else {
+                itemMeta.setDisplayName("Mob: " + getCurrentTeam().getId().toLowerCase());
+            }
+        });
         itemStack.editMeta(ItemMeta.class, itemMeta -> itemMeta.setLore(List.of(ChatColor.GRAY + "Click to change!")));
         final ClickableItem clickableItem = new ClickableItem(new SimpleItem(itemStack).getItemProvider(), player -> {
             MOB_ASKER.ask(player, (response) -> {
@@ -158,14 +245,14 @@ public class ModifyMenu extends PagedMenu {
     public StateItem getTeamStateItem(final Team currentTeam, final DataPointType dataPointType) {
         final List<TeamState> teamStates = new ArrayList<>();
         int currentIndex = 0;
-        for(Team team : Team.VALUES) {
-            if(currentTeam == team) currentIndex = Team.VALUES.indexOf(team);
+        for (Team team : Team.VALUES) {
+            if (currentTeam == team) currentIndex = Team.VALUES.indexOf(team);
             teamStates.add(new TeamState(team));
         }
         teamStates.add(new TeamState(null));
 
         final StateItem clickableItem = new StateItem(teamStates, currentIndex, state -> {
-            final Team targetTeam = ((TeamState)state).getTeam();
+            final Team targetTeam = ((TeamState) state).getTeam();
             if (targetTeam == null) {
                 getDataContainer().remove(Keys.TEAM_KEY);
                 getArmorStandEntity().getEquipment().setHelmet(null);
@@ -178,22 +265,6 @@ public class ModifyMenu extends PagedMenu {
             return null;
         });
         return clickableItem;
-    }
-
-    public ModifyMenu(LivingEntity armorStandEntity, final DataPointType dataPointType) {
-        super(new ArrayList<>());
-        this.armorStandEntity = armorStandEntity;
-
-        setContent(getItems(dataPointType));
-
-        Replacer replacer = new Replacer();
-        replacer.replaceLiteral("%data_point%", dataPointType.name()).replaceWithSupplier("%team%", () -> {
-            final Team currentTeam = this.getCurrentTeam();
-            return this.miniMessage.deserialize(currentTeam == null ? "N/A" : currentTeam.getDisplayName());
-        });
-
-        //this.onDirectionClick();
-        //this.onCloneClick();
     }
 
     private void changeDirection(String response, BiConsumer<Location, Float> directionModifier) {

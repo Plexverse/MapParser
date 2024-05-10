@@ -43,11 +43,23 @@ public enum GameType {
             Material.FEATHER
     ),
     MINI_BRIDGES(
-        miniBridgesRequirements(),
-        "MiniBridges",
-        List.of(SPAWNPOINT, CHEST_MID, ISLAND_BORDER, BORDER, BRIDGE_POINT, BRIDGE_TYPE, SPECTATOR_SPAWNPOINT),
-        Material.IRON_PICKAXE
+            miniBridgesRequirements(),
+            "MiniBridges",
+            List.of(SPAWNPOINT, CHEST_MID, ISLAND_BORDER, BORDER, BRIDGE_POINT, BRIDGE_TYPE, SPECTATOR_SPAWNPOINT),
+            Material.IRON_PICKAXE
     );
+
+    private static final GameType[] VALUES = values();
+    private final Map<String, Integer> requirements;
+    private final String displayName;
+    private final List<DataPointType> dataPointTypeList;
+    private final Material material;
+    GameType(Map<String, Integer> requirements, String displayName, List<DataPointType> dataPointTypeList, Material material) {
+        this.requirements = requirements;
+        this.displayName = displayName;
+        this.dataPointTypeList = dataPointTypeList;
+        this.material = material;
+    }
 
     private static Map<String, Integer> microBattlesRequirements() {
         final Map<String, Integer> result = new HashMap<>();
@@ -70,11 +82,11 @@ public enum GameType {
 
     private static Map<String, Integer> speedBuildersRequirements() {
         final Map<String, Integer> result = new HashMap<>();
-        for(int i = 1; i <= 8; i++) {
+        for (int i = 1; i <= 8; i++) {
             result.put("SPAWNPOINT_" + i, 2);
             result.put("ISLAND_BORDER_" + i, 2);
             result.put("ISLAND_BUILD_BORDER_" + i, 2);
-            result.put("HOLOGRAM_" + i, 2);
+            result.put("HOLOGRAM_" + i, 1);
         }
         result.put("CENTER", 1);
         result.put("BORDER", 2);
@@ -84,7 +96,7 @@ public enum GameType {
 
     private static Map<String, Integer> skywarsRequirements() {
         final Map<String, Integer> result = new HashMap<>();
-        for(int i = 1; i <= 12; i++) {
+        for (int i = 1; i <= 12; i++) {
             result.put("SPAWNPOINT_" + i, 2);
             result.put("HOLOGRAM_" + i, 1);
             result.put("CHEST_" + i, 3);
@@ -120,20 +132,6 @@ public enum GameType {
         result.put("BRIDGE_TYPE", 1);
 
         return result;
-    }
-
-    private final Map<String, Integer> requirements;
-    private final String displayName;
-    private final List<DataPointType> dataPointTypeList;
-    private final Material material;
-
-    private static final GameType[] VALUES = values();
-
-    GameType(Map<String, Integer> requirements, String displayName, List<DataPointType> dataPointTypeList, Material material) {
-        this.requirements = requirements;
-        this.displayName = displayName;
-        this.dataPointTypeList = dataPointTypeList;
-        this.material = material;
     }
 
     public static GameType getNextGameType(GameType gameType) {

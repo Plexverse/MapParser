@@ -1,7 +1,6 @@
 package net.plexverse.mapparser.saving.zip;
 
 import lombok.SneakyThrows;
-import net.plexverse.mapparser.parser.WorldParser;
 import net.plexverse.mapparser.saving.SavingStrategy;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
@@ -20,9 +19,9 @@ public class ZipSavingStrategy implements SavingStrategy {
 
     @SneakyThrows
     @Override
-    public void save(File file) {
+    public void save(final File file, final String folder) {
         final String zipName = file.getName() + ".zip";
-        final File templatesTarget = new File(WorldParser.TEMPLATES_FOLDER, zipName);
+        final File templatesTarget = new File(folder, zipName);
         templatesTarget.delete();
 
         final File zippedFile = new File(Bukkit.getWorldContainer(), zipName);

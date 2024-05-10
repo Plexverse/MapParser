@@ -1,4 +1,4 @@
-package net.plexverse.mapparser.parsed;
+package net.plexverse.mapparser.objects;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.Getter;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.plexverse.mapparser.enums.DataPointType;
-import net.plexverse.mapparser.objects.Team;
 import org.bukkit.entity.Player;
 
 import java.io.*;
@@ -17,12 +16,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class DataPointInfo {
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().setLenient().enableComplexMapKeySerialization().create();
     private final Map<String, String> mapMeta;
-
     @Getter
     private final Map<String, Set<WorldLocation>> dataPoints;
-
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().setLenient().enableComplexMapKeySerialization().create();
 
     public DataPointInfo() {
         this.mapMeta = new HashMap<>();
